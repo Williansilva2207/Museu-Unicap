@@ -1,0 +1,212 @@
+/* Management portal login (prototype: login_portal_de_gest_o_espa_o_cultural_unicap). */
+
+.login-shell {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 80rem;
+  min-height: 46rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  border-radius: var(--radius-xl);
+  background: var(--surface-container-lowest);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .login-card {
+    grid-template-columns: 5fr 7fr;
+  }
+}
+
+/* --- Institutional banner --- */
+
+.login-banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  color: var(--on-primary);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(254, 198, 102, 0.14), transparent 55%),
+    linear-gradient(160deg, var(--primary-container), var(--primary) 70%);
+  overflow: hidden;
+}
+
+.banner-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.banner-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--secondary-fixed);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-brand-name {
+  color: var(--surface-container-lowest);
+  font-weight: 800;
+}
+
+.banner-brand-sub {
+  color: var(--secondary-fixed);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.banner-terminal {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--secondary-fixed);
+}
+
+.banner-message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 30rem;
+}
+
+.banner-headline {
+  color: var(--surface-container-lowest);
+}
+
+.banner-text {
+  color: var(--primary-fixed);
+}
+
+.banner-footer {
+  color: rgba(255, 218, 218, 0.7);
+}
+
+/* --- Form side --- */
+
+.login-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+@media (min-width: 1024px) {
+  .login-side {
+    padding: var(--space-xl);
+  }
+}
+
+.demo-notice {
+  margin: 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.input-with-action {
+  padding-right: 3.25rem;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--outline);
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.password-toggle:hover {
+  color: var(--on-surface);
+}
+
+.login-submit {
+  width: 100%;
+}
+
+/* --- Quick links --- */
+
+.quick-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--surface-container);
+}
+
+.quick-title-row {
+  justify-content: space-between;
+}
+
+.quick-title {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 640px) {
+  .quick-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.quick-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  text-align: center;
+  padding: var(--space-sm);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius);
+  background: var(--surface-container-low);
+  text-decoration: none;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.quick-link:hover {
+  background: var(--surface-container);
+  border-color: rgba(110, 18, 32, 0.4);
+}
+
+.quick-link-label {
+  font-weight: 600;
+}

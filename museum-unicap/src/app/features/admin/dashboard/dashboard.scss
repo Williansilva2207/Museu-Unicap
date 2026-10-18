@@ -1,0 +1,355 @@
+/* Management dashboard (prototype: dashboard_geral_gest_o_espa_o_cultural_unicap).
+   Shared KPI/chart primitives live in the global design system. */
+
+/* --- Sticky top bar --- */
+
+.admin-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--surface-container-high);
+  box-shadow: var(--shadow-1);
+}
+
+.admin-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: 80px;
+  flex-wrap: wrap;
+}
+
+.admin-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-container);
+  color: var(--on-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  box-shadow: var(--shadow-1);
+}
+
+.admin-brand-row {
+  gap: 0.5rem;
+}
+
+.admin-brand-name {
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--primary-container);
+}
+
+.admin-nav {
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--surface-container-low);
+  border-radius: var(--radius-full);
+  padding: 0.375rem;
+}
+
+@media (min-width: 1024px) {
+  .admin-nav {
+    display: flex;
+  }
+}
+
+.admin-nav-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  text-decoration: none;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.admin-nav-item:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--on-surface);
+}
+
+.admin-nav-item--active {
+  background: var(--primary-container);
+  color: var(--on-primary);
+  font-weight: 600;
+}
+
+.admin-profile {
+  gap: var(--space-sm);
+}
+
+.admin-profile-info {
+  display: none;
+  flex-direction: column;
+  text-align: right;
+}
+
+@media (min-width: 640px) {
+  .admin-profile-info {
+    display: flex;
+  }
+}
+
+.admin-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: rgba(110, 18, 32, 0.1);
+  border: 1px solid rgba(110, 18, 32, 0.2);
+  color: var(--primary-container);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Main area --- */
+
+.admin-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding-block: var(--space-md);
+}
+
+.demo-badge {
+  align-self: flex-start;
+}
+
+.admin-state {
+  justify-content: center;
+  padding: var(--space-xl) 0;
+  gap: var(--space-sm);
+}
+
+/* --- Executive header --- */
+
+.exec-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+@media (min-width: 1024px) {
+  .exec-header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.exec-overline {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.exec-title {
+  color: var(--primary-container);
+}
+
+.exec-text {
+  max-width: 40rem;
+}
+
+.exec-actions {
+  flex-wrap: wrap;
+}
+
+.period-select {
+  background: var(--surface-container-low);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+}
+
+.period-select select {
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--on-surface);
+  cursor: pointer;
+}
+
+/* --- Chart cards & grids --- */
+
+.demo-grid,
+.satisfaction-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 1024px) {
+  .demo-grid {
+    grid-template-columns: 5fr 3fr 4fr;
+  }
+
+  .satisfaction-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.chart-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.chart-head {
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.chart-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+
+.bar-label {
+  /* keeps the row aligned with the value on the right */
+  flex-grow: 1;
+}
+
+/* Likert summary grid inside the satisfaction chart card. */
+.likert-summary {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-sm);
+}
+
+/* City ranking */
+.ranking-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ranking-row {
+  background: var(--surface);
+  border: 1px solid var(--surface-container-high);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  justify-content: space-between;
+}
+
+.ranking-value {
+  font-weight: 800;
+  color: var(--primary-container);
+}
+
+.ranking-caption {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+/* Topic rows */
+.topic-row {
+  background: var(--surface);
+  border: 1px solid var(--surface-container-high);
+  border-radius: var(--radius-sm);
+  padding: 0.625rem;
+}
+
+.topic-label {
+  flex-grow: 1;
+}
+
+.topic-share {
+  font-weight: 700;
+}
+
+/* Pedagogical grid */
+.pedagogical-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .pedagogical-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .pedagogical-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.network-list {
+  margin-top: 0.25rem;
+}
+
+.network-row {
+  justify-content: space-between;
+}
+
+.network-value {
+  font-weight: 700;
+  color: var(--primary-container);
+}
+
+/* --- Contacts table --- */
+
+.contacts-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.contact-name {
+  color: var(--primary-container);
+}
+
+.contact-action {
+  border: none;
+  background: transparent;
+  color: var(--primary-container);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.contact-action:hover {
+  text-decoration: underline;
+}
+
+.contacts-footer {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface);
+  border-top: 1px solid var(--surface-container-high);
+}
+
+/* --- Footer --- */
+
+.admin-footer {
+  background: var(--surface-container-lowest);
+  border-top: 1px solid var(--surface-container-high);
+  padding-block: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.admin-footer-inner {
+  justify-content: center;
+}

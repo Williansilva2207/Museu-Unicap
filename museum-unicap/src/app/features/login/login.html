@@ -1,0 +1,149 @@
+<main class="login-shell">
+  <div class="login-card">
+    <!-- Left: institutional banner -->
+    <section class="login-banner">
+      <div class="banner-top">
+        <div class="row">
+          <span class="banner-logo" aria-hidden="true">
+            <span class="icon icon-24">museum</span>
+          </span>
+          <div class="stack-xs">
+            <p class="t-headline-sm banner-brand-name">UNICAP</p>
+            <p class="t-caption banner-brand-sub">Espaço Cultural & Museu</p>
+          </div>
+        </div>
+        <span class="badge banner-terminal">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          Terminal Seguro
+        </span>
+      </div>
+
+      <div class="banner-message">
+        <span class="badge badge--gold">
+          <span class="icon icon-16" aria-hidden="true">verified</span>
+          Patrimônio Vivo & Tradição Jesuíta
+        </span>
+        <h1 class="t-headline-lg banner-headline">
+          Preservando a memória, promovendo a cultura e mediando saberes em
+          Pernambuco.
+        </h1>
+        <p class="t-body-md banner-text">
+          Plataforma centralizada de gestão de indicadores museológicos,
+          visitação e mediação educativa da Universidade Católica de Pernambuco.
+        </p>
+      </div>
+
+      <p class="t-caption banner-footer">
+        Universidade Católica de Pernambuco • Recife, PE
+      </p>
+    </section>
+
+    <!-- Right: authentication form -->
+    <section class="login-side">
+      <div class="stack">
+        <h2 class="t-headline-md">Portal de Gestão & Curadoria</h2>
+        <p class="t-body-md text-muted">Acesse o painel de indicadores do museu.</p>
+      </div>
+
+      @if (demoModeActive) {
+        <p class="feedback feedback--info demo-notice">
+          <span class="icon icon-18" aria-hidden="true">science</span>
+          Modo demonstração: qualquer e-mail institucional com senha de 6 ou mais
+          caracteres autentica nesta simulação.
+        </p>
+      }
+
+      <form class="login-form" (submit)="onSubmit($event)" novalidate>
+        <div class="stack-xs">
+          <label class="field-label" for="identifier">E-mail Institucional ou Matrícula</label>
+          <div class="input-group">
+            <span class="icon" aria-hidden="true">alternate_email</span>
+            <input
+              id="identifier"
+              class="input"
+              type="text"
+              placeholder="coordenacao.cultura@unicap.br"
+              autocomplete="username"
+              [formField]="loginForm.identifier"
+            />
+          </div>
+          @if (fieldErrorMessage(loginForm.identifier); as message) {
+            <p class="field-error">
+              <span class="icon icon-16" aria-hidden="true">error</span>
+              {{ message }}
+            </p>
+          }
+        </div>
+
+        <div class="stack-xs">
+          <label class="field-label" for="password">Senha de Acesso</label>
+          <div class="input-group">
+            <span class="icon" aria-hidden="true">lock</span>
+            <input
+              id="password"
+              class="input input-with-action"
+              [type]="passwordVisible() ? 'text' : 'password'"
+              placeholder="••••••••••••"
+              autocomplete="current-password"
+              [formField]="loginForm.password"
+            />
+            <button
+              class="password-toggle"
+              type="button"
+              [attr.aria-label]="passwordVisible() ? 'Ocultar a senha' : 'Mostrar a senha'"
+              [attr.aria-pressed]="passwordVisible()"
+              (click)="togglePasswordVisibility()"
+            >
+              <span class="icon icon-18" aria-hidden="true">
+                {{ passwordVisible() ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+          @if (fieldErrorMessage(loginForm.password); as message) {
+            <p class="field-error">
+              <span class="icon icon-16" aria-hidden="true">error</span>
+              {{ message }}
+            </p>
+          }
+        </div>
+
+        @if (loginError(); as message) {
+          <p class="feedback feedback--error" role="alert">
+            <span class="icon icon-18" aria-hidden="true">lock_reset</span>
+            {{ message }}
+          </p>
+        }
+
+        <button class="btn btn--primary login-submit" type="submit" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="icon spin" aria-hidden="true">progress_activity</span>
+            Validando credenciais…
+          } @else {
+            Acessar Painel de Gestão
+            <span class="icon" aria-hidden="true">arrow_forward</span>
+          }
+        </button>
+      </form>
+
+      <!-- Quick access to the public terminals -->
+      <div class="quick-links">
+        <div class="row quick-title-row">
+          <p class="t-caption quick-title">
+            <span class="icon icon-16 text-primary" aria-hidden="true">touch_app</span>
+            Terminais e Formulários de Pesquisa
+          </p>
+          <span class="t-caption text-muted">Acesso Rápido</span>
+        </div>
+        <div class="quick-grid">
+          @for (link of quickLinks; track link.path) {
+            <a class="quick-link" [routerLink]="link.path">
+              <span class="icon icon-24 text-primary" aria-hidden="true">{{ link.icon }}</span>
+              <span class="t-label-md quick-link-label">{{ link.label }}</span>
+              <span class="t-caption text-muted">{{ link.hint }}</span>
+            </a>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

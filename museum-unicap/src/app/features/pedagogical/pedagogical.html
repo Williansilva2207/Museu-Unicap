@@ -1,0 +1,444 @@
+<main class="page pedagogical-page">
+  <!-- Institutional module header -->
+  <header class="pedagogical-header">
+    <div class="row header-badges">
+      <span class="badge badge--gold">
+        <span class="icon icon-16" aria-hidden="true">school</span>
+        Avaliação Educativa
+      </span>
+      <span class="t-caption text-gold header-verified">
+        <span class="icon icon-16" aria-hidden="true">verified</span>
+        UNICAP Recife
+      </span>
+    </div>
+    <h1 class="t-headline-md header-title">Relatório Pedagógico</h1>
+    <p class="t-label-md text-muted">
+      Instrumento avaliativo para docentes e mediadores sobre a vivência cultural e
+      curricular no campus.
+    </p>
+  </header>
+
+  <!-- Three-phase stepper -->
+  <nav class="steps-nav" aria-label="Etapas do relatório pedagógico">
+    <button
+      class="steps-nav-step"
+      type="button"
+      [class.steps-nav-step--active]="currentStep() === 1"
+      [class.steps-nav-step--done]="currentStep() > 1"
+      [attr.aria-current]="currentStep() === 1 ? 'step' : null"
+      (click)="goToStep(1)"
+    >
+      <span class="steps-nav-pill" aria-hidden="true"></span>
+      <span class="t-caption steps-nav-title">1. Escola</span>
+    </button>
+    <button
+      class="steps-nav-step"
+      type="button"
+      [class.steps-nav-step--active]="currentStep() === 2"
+      [class.steps-nav-step--done]="currentStep() > 2"
+      [attr.aria-current]="currentStep() === 2 ? 'step' : null"
+      (click)="goToStep(2)"
+    >
+      <span class="steps-nav-pill" aria-hidden="true"></span>
+      <span class="t-caption steps-nav-title">2. Mediação</span>
+    </button>
+    <button
+      class="steps-nav-step"
+      type="button"
+      [class.steps-nav-step--active]="currentStep() === 3"
+      [attr.aria-current]="currentStep() === 3 ? 'step' : null"
+      (click)="goToStep(3)"
+    >
+      <span class="steps-nav-pill" aria-hidden="true"></span>
+      <span class="t-caption steps-nav-title">3. Devolutiva</span>
+    </button>
+  </nav>
+
+  <form (submit)="onSubmit($event)" novalidate>
+    <!-- Step 1: school identification -->
+    @if (currentStep() === 1) {
+      <section class="card step-pane">
+        <header class="row step-head">
+          <span class="step-badge step-badge--active">1</span>
+          <div>
+            <h2 class="t-title-lg">Identificação do Grupo</h2>
+            <p class="t-caption text-muted">
+              Informe o contexto institucional da sua turma
+            </p>
+          </div>
+        </header>
+
+        <div class="stack">
+          <div class="stack-xs">
+            <label class="field-label" for="institution-name">
+              Nome da Instituição de Ensino
+            </label>
+            <div class="input-group">
+              <span class="icon" aria-hidden="true">account_balance</span>
+              <input
+                id="institution-name"
+                class="input"
+                type="text"
+                placeholder="Ex.: E.E.M. Sylvio Rabello"
+                autocomplete="organization"
+                [formField]="pedagogicalForm.institutionName"
+              />
+            </div>
+            @if (fieldErrorMessage(pedagogicalForm.institutionName); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </div>
+
+          <fieldset class="stack-xs">
+            <legend class="field-label">Rede de Ensino</legend>
+            <div class="segment-grid" role="radiogroup" aria-label="Rede de Ensino">
+              @for (option of networks; track option.value) {
+                <label class="choice choice--segment">
+                  <input
+                    type="radio"
+                    [value]="option.value"
+                    [formField]="pedagogicalForm.network"
+                  />
+                  <span class="t-label-md">{{ option.label }}</span>
+                </label>
+              }
+            </div>
+            @if (fieldErrorMessage(pedagogicalForm.network); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </fieldset>
+
+          <fieldset class="stack-xs">
+            <legend class="field-label">Ano / Ciclo Atendido</legend>
+            <div class="chip-row" aria-label="Etapa escolar">
+              @for (cycle of cycleCheckboxes; track cycle.value) {
+                <label class="choice choice--pill choice--accent">
+                  <input type="checkbox" [formField]="cycle.control" />
+                  {{ cycle.label }}
+                </label>
+              }
+            </div>
+            @if (cycleGroupError()) {
+              <p class="field-error" role="alert">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                Selecione pelo menos um ciclo de ensino.
+              </p>
+            }
+          </fieldset>
+
+          <div class="stack-xs">
+            <label class="field-label" for="students-count">
+              Número Aproximado de Estudantes
+            </label>
+            <div class="stepper">
+              <button
+                class="btn btn--tonal stepper-btn"
+                type="button"
+                aria-label="Diminuir 5 alunos"
+                (click)="adjustStudentCount(-5)"
+              >
+                <span class="icon" aria-hidden="true">remove</span>
+              </button>
+              <input
+                id="students-count"
+                class="input stepper-input"
+                type="number"
+                inputmode="numeric"
+                [formField]="pedagogicalForm.studentCount"
+              />
+              <button
+                class="btn btn--tonal stepper-btn"
+                type="button"
+                aria-label="Aumentar 5 alunos"
+                (click)="adjustStudentCount(5)"
+              >
+                <span class="icon" aria-hidden="true">add</span>
+              </button>
+            </div>
+            <p class="t-caption text-muted students-hint">
+              Estimativa de alunos que participaram da atividade no Museu
+            </p>
+            @if (fieldErrorMessage(pedagogicalForm.studentCount); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </div>
+        </div>
+
+        <button class="btn btn--primary step-next" type="button" (click)="goToStep(2)">
+          Avançar para Mediação
+          <span class="icon icon-18" aria-hidden="true">arrow_forward</span>
+        </button>
+      </section>
+    }
+
+    <!-- Step 2: curricular experience & mediation -->
+    @if (currentStep() === 2) {
+      <section class="card step-pane">
+        <header class="row step-head">
+          <span class="step-badge step-badge--active">2</span>
+          <div>
+            <h2 class="t-title-lg">Experiência Curricular</h2>
+            <p class="t-caption text-muted">
+              Conexão do acervo com a prática docente e mediação
+            </p>
+          </div>
+        </header>
+
+        <div class="stack">
+          <fieldset class="stack-xs">
+            <legend class="field-label">
+              1. Adequação da exposição ao currículo escolar (BNCC)
+            </legend>
+            <div class="scale-grid" role="radiogroup" aria-label="Escala de adequação ao currículo de 1 a 5">
+              @for (option of curriculumScale; track option.value) {
+                <label class="choice choice--segment choice--segment-block">
+                  <input
+                    type="radio"
+                    [value]="option.radioValue"
+                    [formField]="pedagogicalForm.curriculumAlignmentScore"
+                  />
+                  <span class="t-title-lg scale-number">{{ option.label }}</span>
+                  <span class="t-caption scale-caption">{{ option.caption }}</span>
+                </label>
+              }
+            </div>
+            @if (fieldErrorMessage(pedagogicalForm.curriculumAlignmentScore); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </fieldset>
+
+          <fieldset class="stack-xs">
+            <legend class="field-label">2. Atendimento e mediação dos monitores UNICAP</legend>
+            <div class="segment-grid segment-grid--two" role="radiogroup" aria-label="Mediação dos monitores">
+              @for (option of mediatorRatings; track option.value) {
+                <label class="choice choice--segment">
+                  <input
+                    type="radio"
+                    [value]="option.value"
+                    [formField]="pedagogicalForm.mediatorsRating"
+                  />
+                  <span class="icon icon-18" aria-hidden="true">{{ option.icon }}</span>
+                  <span class="t-label-md">{{ option.label }}</span>
+                </label>
+              }
+            </div>
+            @if (fieldErrorMessage(pedagogicalForm.mediatorsRating); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </fieldset>
+
+          <fieldset class="stack-xs">
+            <legend class="field-label">3. Qualidade do guia didático e materiais de apoio</legend>
+            <div class="segment-grid segment-grid--three" role="radiogroup" aria-label="Materiais didáticos">
+              @for (option of materialsRatings; track option.value) {
+                <label class="choice choice--segment choice--segment-block">
+                  <input
+                    type="radio"
+                    [value]="option.value"
+                    [formField]="pedagogicalForm.materialsRating"
+                  />
+                  <span class="icon icon-18" aria-hidden="true">{{ option.icon }}</span>
+                  <span class="t-label-md">{{ option.label }}</span>
+                </label>
+              }
+            </div>
+            @if (fieldErrorMessage(pedagogicalForm.materialsRating); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </fieldset>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn--tonal step-back" type="button" (click)="goToStep(1)">
+            <span class="icon icon-18" aria-hidden="true">arrow_back</span>
+            Voltar
+          </button>
+          <button class="btn btn--primary step-next" type="button" (click)="goToStep(3)">
+            Avançar para Avaliação Final
+            <span class="icon icon-18" aria-hidden="true">arrow_forward</span>
+          </button>
+        </div>
+      </section>
+    }
+
+    <!-- Step 3: qualitative feedback & continuity -->
+    @if (currentStep() === 3) {
+      <section class="card step-pane">
+        <header class="row step-head">
+          <span class="step-badge step-badge--active">3</span>
+          <div>
+            <h2 class="t-title-lg">Contribuição & Continuidade</h2>
+            <p class="t-caption text-muted">
+              Compartilhe impressões para enriquecer nossos roteiros
+            </p>
+          </div>
+        </header>
+
+        <div class="stack">
+          <div class="stack-xs">
+            <label class="field-label" for="suggestions">
+              Sugestões para futuras exposições ou adaptações pedagógicas
+            </label>
+            <textarea
+              id="suggestions"
+              class="textarea"
+              rows="3"
+              placeholder="Conte-nos como podemos aproximar ainda mais os roteiros dos objetivos de sala de aula da sua escola…"
+              [formField]="pedagogicalForm.suggestions"
+            ></textarea>
+            <p class="t-caption text-muted">
+              {{ suggestionsLength() }} / {{ suggestionsMaxLength }} caracteres
+            </p>
+            @if (fieldErrorMessage(pedagogicalForm.suggestions); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </div>
+
+          <label class="switch-row">
+            <span class="stack-xs switch-copy">
+              <span class="t-label-lg">Agendar novas visitas escolares?</span>
+              <span class="t-caption text-muted">
+                Receber prioridade no calendário do próximo semestre
+              </span>
+            </span>
+            <span class="switch">
+              <input type="checkbox" [formField]="pedagogicalForm.interestedInFutureVisits" />
+              <span class="switch-track" aria-hidden="true">
+                <span class="switch-knob"></span>
+              </span>
+            </span>
+          </label>
+
+          <fieldset class="stack-xs">
+            <legend class="field-label">
+              Canal de Contato do Professor / Coordenação (opcional)
+            </legend>
+            <div class="segment-grid segment-grid--two" role="radiogroup" aria-label="Canal de preferência de contato">
+              <label class="choice choice--segment">
+                <input
+                  type="radio"
+                  value="whatsapp"
+                  [formField]="pedagogicalForm.contactChannel"
+                />
+                <span class="icon icon-18" aria-hidden="true">chat</span>
+                <span class="t-label-md">WhatsApp</span>
+              </label>
+              <label class="choice choice--segment">
+                <input
+                  type="radio"
+                  value="phone"
+                  [formField]="pedagogicalForm.contactChannel"
+                />
+                <span class="icon icon-18" aria-hidden="true">phone</span>
+                <span class="t-label-md">Telefone Institucional</span>
+              </label>
+            </div>
+          </fieldset>
+
+          @if (showContactValue()) {
+            <div class="stack-xs">
+              <label class="field-label" for="contact-value">
+                Telefone / WhatsApp para contato
+              </label>
+              <input
+                id="contact-value"
+                class="input"
+                type="tel"
+                placeholder="(81) 9XXXX-XXXX ou ramal escolar"
+                autocomplete="tel"
+                [formField]="pedagogicalForm.contactValue"
+              />
+              @if (fieldErrorMessage(pedagogicalForm.contactValue); as message) {
+                <p class="field-error">
+                  <span class="icon icon-16" aria-hidden="true">error</span>
+                  {{ message }}
+                </p>
+              }
+            </div>
+          }
+        </div>
+
+        @if (submitError(); as message) {
+          <p class="feedback feedback--error" role="alert">
+            <span class="icon icon-18" aria-hidden="true">cloud_off</span>
+            {{ message }}
+          </p>
+        }
+
+        <div class="step-nav">
+          <button class="btn btn--tonal step-back" type="button" (click)="goToStep(2)">
+            <span class="icon icon-18" aria-hidden="true">arrow_back</span>
+            Voltar
+          </button>
+          <button class="btn btn--primary step-next" type="submit" [disabled]="submitting()">
+            @if (submitting()) {
+              <span class="icon spin" aria-hidden="true">progress_activity</span>
+              Enviando relatório…
+            } @else {
+              <span class="icon icon-18" aria-hidden="true">send</span>
+              Enviar Avaliação Pedagógica
+            }
+          </button>
+        </div>
+      </section>
+    }
+  </form>
+
+  <!-- Institutional closing note -->
+  <div class="closing-note row">
+    <span class="closing-icon" aria-hidden="true">
+      <span class="icon icon-18">auto_stories</span>
+    </span>
+    <p class="t-caption text-muted closing-text">
+      Sua contribuição fortalece o papel educacional e social da UNICAP em
+      Pernambuco, assegurando mediações vivas e plurais para a juventude.
+    </p>
+  </div>
+</main>
+
+<!-- Success dialog (only after a successful submission) -->
+<app-modal
+  [open]="successResponse() !== null"
+  dialogLabel="Relatório pedagógico enviado"
+  (closed)="onModalClosed()"
+>
+  @if (successResponse(); as response) {
+    <div class="modal-icon" aria-hidden="true">
+      <span class="icon icon-44">task_alt</span>
+    </div>
+    <div class="stack-xs">
+      <h2 class="t-headline-sm">Relatório Enviado!</h2>
+      <p class="t-body-md text-muted">
+        Agradecemos pela parceria pedagógica. A equipe do Espaço Cultural UNICAP
+        entrará em contato para os próximos roteiros.
+      </p>
+      <p class="t-label-md">
+        Protocolo: <strong class="text-primary">{{ response.protocol }}</strong>
+      </p>
+    </div>
+  }
+  <button class="btn btn--primary" type="button" (click)="onModalClosed()">
+    Concluir e Voltar
+  </button>
+</app-modal>

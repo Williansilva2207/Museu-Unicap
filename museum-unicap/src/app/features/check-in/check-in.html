@@ -1,0 +1,468 @@
+<main class="page checkin-page">
+  <!-- Top metadata bar & kiosk status -->
+  <div class="topbar">
+    <div class="row topbar-meta">
+      <span class="badge badge--gold topbar-terminal">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        Terminal Estação 02 • Hall Pe. Aloísio Mosca
+      </span>
+      <span class="t-caption topbar-location">Recife / Boa Vista • Modo Check-in Ativo</span>
+    </div>
+    <button class="btn btn--tonal topbar-reset" type="button" (click)="resetForm()">
+      <span class="icon" aria-hidden="true">restart_alt</span>
+      Reiniciar Terminal
+    </button>
+  </div>
+
+  <div class="checkin-grid">
+    <!-- Left column: welcome hero & current exhibition -->
+    <aside class="stack">
+      <section class="hero">
+        <p class="t-caption overline-gold">Espaço Cultural UNICAP</p>
+        <h1 class="t-headline-lg hero-title">Bem-vindo ao Memorial & Museu</h1>
+        <p class="t-body-md hero-text">
+          Toque nas opções para registrar seu acesso ágil, gratuito e nos ajudar a
+          mapear a circulação cultural na Católica de Pernambuco.
+        </p>
+      </section>
+
+      <article class="exhibition">
+        <div class="exhibition-banner" aria-hidden="true">
+          <span class="icon icon-44 exhibition-icon">museum</span>
+          <div class="exhibition-overlay">
+            <p class="t-caption exhibition-tag">Em Cartaz Hoje</p>
+            <h2 class="t-title-lg">Tradição Barroca & Expressão Contemporânea</h2>
+          </div>
+        </div>
+        <div class="stack-sm exhibition-info">
+          <p class="row t-label-md">
+            <span class="icon icon-18 text-gold" aria-hidden="true">pin_drop</span>
+            Galeria Pe. Aloísio Mosca de Carvalho, Térreo
+          </p>
+          <p class="row t-label-md">
+            <span class="icon icon-18 text-gold" aria-hidden="true">calendar_today</span>
+            Terça a Sábado • 09:00 às 18:00
+          </p>
+          <p class="row t-label-md">
+            <span class="icon icon-18 text-gold" aria-hidden="true">verified</span>
+            Curadoria: Núcleo de Memória e História da UNICAP
+          </p>
+        </div>
+      </article>
+
+      <div class="assistant row">
+        <span class="assistant-icon" aria-hidden="true">
+          <span class="icon icon-24">support_agent</span>
+        </span>
+        <div class="stack-xs">
+          <p class="t-label-lg">Precisa de mediação guiada?</p>
+          <p class="t-caption text-muted">
+            Solicite apoio do monitor no balcão central de recepção ao lado.
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right column: registration steps -->
+    <form class="stack" (submit)="onSubmit($event)" novalidate>
+      <!-- Step 1: visit type -->
+      <section class="card step">
+        <header class="step-header">
+          <div class="row">
+            <span class="step-badge step-badge--active">1</span>
+            <div>
+              <h2 class="t-title-lg">Tipo de Visita</h2>
+              <p class="t-caption text-muted">Selecione o formato da sua experiência hoje</p>
+            </div>
+          </div>
+          <span class="badge badge--required">Obrigatório</span>
+        </header>
+
+        <div class="tile-grid" role="radiogroup" aria-label="Tipo de Visita">
+          @for (option of visitTypes; track option.value) {
+            <label class="choice choice--tile">
+              <input
+                type="radio"
+                [value]="option.value"
+                [formField]="checkInForm.visitType"
+              />
+              <span class="tile-icon" aria-hidden="true">
+                <span class="icon icon-26">{{ option.icon }}</span>
+              </span>
+              <span class="tile-body">
+                <span class="tile-title">
+                  <span class="t-label-lg">{{ option.label }}</span>
+                  <span class="icon icon-18 choice-check" aria-hidden="true">check_circle</span>
+                </span>
+                <span class="t-label-md text-muted">{{ option.description }}</span>
+                <span class="t-caption text-gold">{{ option.hint }}</span>
+              </span>
+            </label>
+          }
+        </div>
+        @if (fieldErrorMessage(checkInForm.visitType); as message) {
+          <p class="field-error">
+            <span class="icon icon-16" aria-hidden="true">error</span>
+            {{ message }}
+          </p>
+        }
+
+        @if (needsVisitorCount()) {
+          <div class="stack-xs group-size">
+            <label class="field-label" for="visitor-count">
+              <span class="icon icon-18 text-gold" aria-hidden="true">groups</span>
+              Quantidade de pessoas do grupo
+            </label>
+            <div class="stepper">
+              <button
+                class="btn btn--tonal stepper-btn"
+                type="button"
+                aria-label="Diminuir uma pessoa"
+                (click)="adjustVisitorCount(-1)"
+              >
+                <span class="icon" aria-hidden="true">remove</span>
+              </button>
+              <input
+                id="visitor-count"
+                class="input stepper-input"
+                type="number"
+                inputmode="numeric"
+                [formField]="checkInForm.visitorCount"
+              />
+              <button
+                class="btn btn--tonal stepper-btn"
+                type="button"
+                aria-label="Aumentar uma pessoa"
+                (click)="adjustVisitorCount(1)"
+              >
+                <span class="icon" aria-hidden="true">add</span>
+              </button>
+            </div>
+            @if (fieldErrorMessage(checkInForm.visitorCount); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </div>
+        } @else {
+          <p class="t-caption text-muted individual-hint">
+            Visitantes individuais correspondem a 1 pessoa no registro de entrada.
+          </p>
+        }
+      </section>
+
+      <!-- Step 2: primary visitor profile -->
+      <section class="card step">
+        <header class="step-header">
+          <div class="row">
+            <span class="step-badge step-badge--active">2</span>
+            <div>
+              <h2 class="t-title-lg">Perfil do Visitante Principal</h2>
+              <p class="t-caption text-muted">
+                Estatística cultural para adaptação da acessibilidade
+              </p>
+            </div>
+          </div>
+          <span class="badge badge--required">Obrigatório</span>
+        </header>
+
+        <div class="stack">
+          <div class="stack-xs">
+            <p class="field-label" id="age-range-label">Faixa Etária:</p>
+            <div class="pill-grid" role="radiogroup" aria-labelledby="age-range-label">
+              @for (option of ageRanges; track option.value) {
+                <label class="choice choice--pill choice--pill-block">
+                  <input
+                    type="radio"
+                    [value]="option.value"
+                    [formField]="checkInForm.visitorAgeRange"
+                  />
+                  <span class="t-label-lg">{{ option.label }}</span>
+                  <span class="t-caption text-muted">{{ option.range }}</span>
+                </label>
+              }
+            </div>
+            @if (fieldErrorMessage(checkInForm.visitorAgeRange); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </div>
+
+          <div class="stack-xs">
+            <p class="field-label" id="bond-label">Vínculo Institucional:</p>
+            <div class="chip-row" role="radiogroup" aria-labelledby="bond-label">
+              @for (option of bonds; track option.value) {
+                <label class="choice choice--pill choice--accent">
+                  <input
+                    type="radio"
+                    [value]="option.value"
+                    [formField]="checkInForm.institutionalBond"
+                  />
+                  {{ option.label }}
+                </label>
+              }
+            </div>
+            @if (fieldErrorMessage(checkInForm.institutionalBond); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 3: visitor origin -->
+      <section class="card step">
+        <header class="step-header">
+          <div class="row">
+            <span class="step-badge step-badge--active">3</span>
+            <div>
+              <h2 class="t-title-lg">Origem do Visitante</h2>
+              <p class="t-caption text-muted">
+                Mapeamento territorial de impacto cultural em Pernambuco
+              </p>
+            </div>
+          </div>
+          <span class="badge badge--required">Obrigatório</span>
+        </header>
+
+        <div class="stack">
+          <div class="stack-xs">
+            <p class="field-label" id="uf-label">Unidade Federativa (UF):</p>
+            <div class="chip-row" role="radiogroup" aria-labelledby="uf-label">
+              @for (option of federationUnits; track option.value) {
+                <label class="choice choice--pill">
+                  <input
+                    type="radio"
+                    [value]="option.value"
+                    [formField]="checkInForm.federationUnit"
+                  />
+                  {{ option.label }}
+                </label>
+              }
+            </div>
+            @if (fieldErrorMessage(checkInForm.federationUnit); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </div>
+
+          <div class="stack-xs">
+            <p class="field-label" id="municipality-label">Município:</p>
+            <div class="chip-row" role="radiogroup" aria-labelledby="municipality-label">
+              @for (option of municipalities; track option.value) {
+                <label class="choice choice--pill">
+                  <input
+                    type="radio"
+                    [value]="option.value"
+                    [formField]="checkInForm.municipality"
+                  />
+                  {{ option.label }}
+                </label>
+              }
+            </div>
+            @if (fieldErrorMessage(checkInForm.municipality); as message) {
+              <p class="field-error">
+                <span class="icon icon-16" aria-hidden="true">error</span>
+                {{ message }}
+              </p>
+            }
+          </div>
+
+          @if (showNeighborhoods()) {
+            <div class="stack-xs neighborhood-box">
+              <p class="field-label" id="neighborhood-label">
+                <span class="icon icon-18 text-gold" aria-hidden="true">explore</span>
+                Bairro de Residência (Recife):
+              </p>
+              <div class="chip-row" role="radiogroup" aria-labelledby="neighborhood-label">
+                @for (option of neighborhoods; track option.value) {
+                  <label class="choice choice--pill choice--accent choice--pill-sm">
+                    <input
+                      type="radio"
+                      [value]="option.value"
+                      [formField]="checkInForm.neighborhood"
+                    />
+                    {{ option.label }}
+                  </label>
+                }
+              </div>
+              @if (fieldErrorMessage(checkInForm.neighborhood); as message) {
+                <p class="field-error">
+                  <span class="icon icon-16" aria-hidden="true">error</span>
+                  {{ message }}
+                </p>
+              }
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Step 4: optional contact (LGPD friendly) -->
+      <section class="card step">
+        <header class="step-header">
+          <div class="row">
+            <span class="step-badge">4</span>
+            <div>
+              <h2 class="t-title-lg">Conexão Cultural UNICAP</h2>
+              <p class="t-caption text-muted">
+                Receba convites de novas exposições, cursos livres e concertos
+              </p>
+            </div>
+          </div>
+          <span class="badge badge--optional">Opcional</span>
+        </header>
+
+        <div class="stack">
+          <div class="contact-grid">
+            <div class="stack-xs">
+              <label class="field-label" for="contact-phone">
+                <span class="icon icon-18 text-gold" aria-hidden="true">chat</span>
+                WhatsApp ou Celular
+              </label>
+              <div class="input-group">
+                <input
+                  id="contact-phone"
+                  class="input"
+                  type="tel"
+                  placeholder="(81) 99999-9999"
+                  autocomplete="tel"
+                  [formField]="checkInForm.phone"
+                />
+              </div>
+            </div>
+            <div class="stack-xs">
+              <label class="field-label" for="contact-email">
+                <span class="icon icon-18 text-gold" aria-hidden="true">mail</span>
+                E-mail Preferencial
+              </label>
+              <div class="input-group">
+                <input
+                  id="contact-email"
+                  class="input"
+                  type="email"
+                  placeholder="visitante@exemplo.com.br"
+                  autocomplete="email"
+                  [formField]="checkInForm.email"
+                />
+              </div>
+              @if (fieldErrorMessage(checkInForm.email); as message) {
+                <p class="field-error">
+                  <span class="icon icon-16" aria-hidden="true">error</span>
+                  {{ message }}
+                </p>
+              }
+            </div>
+          </div>
+
+          <label class="consent">
+            <input type="checkbox" [formField]="checkInForm.communicationConsent" />
+            <span class="consent-box" aria-hidden="true">
+              <span class="icon icon-16">check</span>
+            </span>
+            <span class="t-caption text-muted consent-text">
+              Autorizo o envio esporádico do boletim de lançamentos museológicos e
+              atividades acadêmico-culturais da UNICAP, conforme os termos da Lei
+              Geral de Proteção de Dados (LGPD).
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Submission feedback -->
+      @if (submitError(); as message) {
+        <p class="feedback feedback--error" role="alert">
+          <span class="icon icon-18" aria-hidden="true">cloud_off</span>
+          {{ message }}
+        </p>
+      }
+
+      <!-- Sticky action bar -->
+      <div class="action-bar">
+        <div class="row action-group">
+          <button class="btn btn--tonal" type="button" (click)="resetForm()">
+            <span class="icon icon-18" aria-hidden="true">clear_all</span>
+            Limpar Seleção
+          </button>
+          <div class="action-note">
+            <p class="t-caption text-muted">Entrada gratuita • Espaço Público Universitário</p>
+            <p class="t-label-md text-primary">Protocolo de Entrada Imediata</p>
+          </div>
+        </div>
+        <button class="btn btn--primary action-submit" type="submit" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="icon spin" aria-hidden="true">progress_activity</span>
+            Registrando entrada…
+          } @else {
+            Concluir & Entrar no Museu
+            <span class="icon" aria-hidden="true">arrow_forward</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="page site-footer-inner">
+    <div class="row">
+      <span class="t-headline-sm text-primary site-footer-brand">UNICAP</span>
+      <span class="t-body-md text-muted">
+        Universidade Católica de Pernambuco • Rua do Príncipe, 526, Boa Vista, Recife - PE
+      </span>
+    </div>
+    <span class="t-caption text-muted">
+      Espaço Cultural e Museu • Acesso gratuito e universal
+    </span>
+  </div>
+</footer>
+
+<!-- Confirmation dialog (only after successful persistence) -->
+<app-modal
+  [open]="successResponse() !== null"
+  dialogLabel="Check-in confirmado"
+  (closed)="onModalClosed()"
+>
+  @if (successResponse(); as response) {
+    <div class="modal-icon" aria-hidden="true">
+      <span class="icon icon-44">check</span>
+    </div>
+    <div class="stack-xs">
+      <p class="t-label-md overline-gold">Acesso Liberado</p>
+      <h2 class="t-headline-md">Seja Bem-vindo à UNICAP!</h2>
+      <p class="t-body-md text-muted">Seu check-in foi registrado com sucesso.</p>
+    </div>
+    <div class="stack-xs modal-details">
+      @if (response.visitorCountToday; as countToday) {
+        <p class="t-body-md">
+          Você é o visitante <strong class="text-primary">#{{ countToday }}</strong> de hoje.
+        </p>
+      }
+      <p class="t-label-md">
+        Protocolo: <strong class="text-primary">{{ response.protocol }}</strong>
+      </p>
+      <p class="t-caption text-muted">
+        Registro em {{ formatCheckedInAt(response.checkedInAt) }}
+      </p>
+    </div>
+    <div class="stack-xs modal-galary-info">
+      <p class="row t-label-md">
+        <span class="icon icon-18 text-gold" aria-hidden="true">pin_drop</span>
+        Galeria: Pe. Aloísio Mosca (Térreo)
+      </p>
+      <p class="row t-label-md">
+        <span class="icon icon-18 text-gold" aria-hidden="true">qr_code_2</span>
+        Guia Digital: aproxime seu celular dos totens
+      </p>
+    </div>
+  }
+  <button class="btn btn--primary" type="button" (click)="onModalClosed()">
+    Iniciar Novo Check-in
+  </button>
+</app-modal>

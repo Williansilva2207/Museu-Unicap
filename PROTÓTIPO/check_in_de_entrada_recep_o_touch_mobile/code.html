@@ -1,0 +1,396 @@
+<!DOCTYPE html><html lang="pt-BR" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>Check-in de Entrada - Recepção Touch Mobile | UNICAP</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              wine: '#6E1220',
+              'wine-dark': '#550e18',
+              'wine-light': '#861b2a',
+              gold: '#C28E2B',
+              'gold-light': '#E9B958',
+              'gold-subtle': '#FDF6E2',
+              'gold-surface': '#F4E3BA',
+              surface: '#F8F9FA',
+              card: '#FFFFFF'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'card-subtle': '0 2px 10px -2px rgba(0, 0, 0, 0.04), 0 1px 3px -1px rgba(0, 0, 0, 0.02)',
+            'sticky-bar': '0 -4px 16px rgba(0, 0, 0, 0.06)'
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="base-enhancements">
+    body {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+    }
+    
+    /* Touch target minimum reassurance */
+    .touch-target {
+      min-height: 48px;
+    }
+
+    /* Scrollbar minimal styling */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E2E8F0;
+      border-radius: 4px;
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="bg-[#F4F4F6] text-slate-800 font-sans antialiased pb-32">
+<!-- BEGIN: KioskStatusHeader -->
+<!-- Top minimal kiosk info bar (No institutional master navbar) -->
+<header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/80 px-4 py-3">
+<div class="flex items-center justify-between text-xs text-slate-600">
+<!-- Terminal & Location Badge -->
+<div class="flex items-center space-x-2 truncate pr-2">
+<span aria-hidden="true" class="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0 ring-4 ring-amber-100"></span>
+<div class="truncate leading-tight">
+<span class="font-bold text-slate-900 block">• Museu UNCAP</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Check-in&nbsp;</span>
+</div>
+</div>
+<!-- Quick Action Controls for Kiosk -->
+<div class="flex items-center space-x-1 shrink-0">
+<button aria-label="Áudio Guia de Apoio" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 active:bg-slate-200 transition-colors text-xs font-semibold touch-target min-h-0 h-9" type="button">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="volume-2" aria-hidden="true" class="lucide lucide-volume-2 w-4 h-4 text-brand-wine"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"></path><path d="M16 9a5 5 0 0 1 0 6"></path><path d="M19.364 18.364a9 9 0 0 0 0-12.728"></path></svg>
+<span class="hidden xs:inline">Áudio</span>
+</button>
+<button aria-label="Reiniciar Terminal" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 active:bg-slate-200 transition-colors text-xs font-semibold touch-target min-h-0 h-9" type="button">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="rotate-ccw" aria-hidden="true" class="lucide lucide-rotate-ccw w-4 h-4 text-slate-500"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+<span class="hidden xs:inline">Reiniciar</span>
+</button>
+</div>
+</div>
+</header>
+<!-- END: KioskStatusHeader -->
+<!-- BEGIN: MainContent -->
+<main class="max-w-lg mx-auto px-4 pt-4 space-y-4">
+<!-- BEGIN: Section1_TipoDeVisita -->
+<!-- Seção 1: Formato da Visita (Obrigatório) -->
+<section class="bg-white rounded-2xl p-4 shadow-card-subtle border border-slate-200/70" data-purpose="visit-type-section">
+<!-- Section Header -->
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center space-x-3">
+<span class="flex items-center justify-center w-7 h-7 rounded-full bg-brand-wine text-white text-sm font-bold shadow-sm">1</span>
+<div>
+<h2 class="text-base font-bold text-slate-900 leading-tight">Tipo de Visita</h2>
+<p class="text-xs text-slate-500 mt-0.5">Selecione o formato da sua experiência hoje</p>
+</div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-500">Obrigatório</span>
+</div>
+<!-- Visit Options (Touch Cards) -->
+<div aria-label="Tipo de Visita" class="grid grid-cols-1 gap-2.5" role="radiogroup">
+<!-- Individual (Selected State as per screenshot) -->
+<label class="relative flex items-center p-3.5 rounded-xl border-2 border-brand-wine bg-white/70 active:scale-[0.99] transition-all cursor-pointer">
+<input checked="" class="sr-only peer" name="visit_type" type="radio" value="individual">
+<div class="w-10 h-10 rounded-lg bg-brand-wine text-white flex items-center justify-center shrink-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user" aria-hidden="true" class="lucide lucide-user w-5 h-5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+</div>
+<div class="ml-3.5 flex-1 pr-6">
+<div class="text-sm font-bold text-slate-900">Individual</div>
+<div class="text-xs text-slate-600 font-medium">1 pessoa • Acesso livre</div>
+<div class="text-[11px] text-slate-400">Visita autônoma ao acervo</div>
+</div>
+<!-- Selected Indicator -->
+<div class="absolute right-3.5 text-brand-wine">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 fill-brand-wine text-white"><circle cx="12" cy="12" r="10"></circle><path d="m16 9-5.5 5.5L8 12"></path></svg>
+</div>
+</label>
+<!-- Família -->
+<label class="relative flex items-center p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 active:bg-slate-100/70 transition-all cursor-pointer">
+<input class="sr-only peer" name="visit_type" type="radio" value="familia">
+<div class="w-10 h-10 rounded-lg bg-slate-200/80 text-slate-700 flex items-center justify-center shrink-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" aria-hidden="true" class="lucide lucide-users w-5 h-5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+</div>
+<div class="ml-3.5 flex-1 pr-6">
+<div class="text-sm font-bold text-slate-900">Família</div>
+<div class="text-xs text-slate-600">Adultos e crianças acompanhadas</div>
+<div class="text-[11px] text-slate-400">Atividades lúdicas infantis</div>
+</div>
+<!-- Unselected Radio Circle -->
+<div class="w-5 h-5 rounded-full border-2 border-slate-300 absolute right-3.5"></div>
+</label>
+<!-- Grupo Escolar -->
+<label class="relative flex items-center p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 active:bg-slate-100/70 transition-all cursor-pointer">
+<input class="sr-only peer" name="visit_type" type="radio" value="grupo_escolar">
+<div class="w-10 h-10 rounded-lg bg-slate-200/80 text-slate-700 flex items-center justify-center shrink-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="graduation-cap" aria-hidden="true" class="lucide lucide-graduation-cap w-5 h-5"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
+</div>
+<div class="ml-3.5 flex-1 pr-6">
+<div class="text-sm font-bold text-slate-900">Grupo Escolar</div>
+<div class="text-xs text-slate-600">Colégios, turmas ou excursão</div>
+<div class="text-[11px] text-slate-400">Roteiro pedagógico mediado</div>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-slate-300 border-dashed absolute right-3.5"></div>
+</label>
+<!-- Cultural / Pesquisa -->
+<label class="relative flex items-center p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 active:bg-slate-100/70 transition-all cursor-pointer">
+<input class="sr-only peer" name="visit_type" type="radio" value="pesquisa">
+<div class="w-10 h-10 rounded-lg bg-slate-200/80 text-slate-700 flex items-center justify-center shrink-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="book-open" aria-hidden="true" class="lucide lucide-book-open w-5 h-5"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg>
+</div>
+<div class="ml-3.5 flex-1 pr-6">
+<div class="text-sm font-bold text-slate-900">Cultural / Pesquisa</div>
+<div class="text-xs text-slate-600">Pesquisador, palestra ou docência</div>
+<div class="text-[11px] text-slate-400">Consulta a arquivos e obras</div>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-slate-300 absolute right-3.5"></div>
+</label>
+</div>
+</section>
+<!-- END: Section1_TipoDeVisita -->
+<!-- BEGIN: Section2_PerfilVisitante -->
+<!-- Seção 2: Faixa Etária e Vínculo Institucional -->
+<section class="bg-white rounded-2xl p-4 shadow-card-subtle border border-slate-200/70" data-purpose="visitor-profile-section">
+<div class="flex items-start justify-between mb-3.5">
+<div class="flex items-center space-x-3">
+<span class="flex items-center justify-center w-7 h-7 rounded-full bg-brand-wine text-white text-sm font-bold shadow-sm">2</span>
+<div>
+<h2 class="text-base font-bold text-slate-900 leading-tight">Perfil do Visitante Principal</h2>
+<p class="text-xs text-slate-500 mt-0.5">Estatística cultural para adaptação da acessibilidade</p>
+</div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-500">Obrigatório</span>
+</div>
+<!-- Subsection: Faixa Etária -->
+<div class="mb-4">
+<label class="block text-xs font-bold text-slate-700 mb-2">Faixa Etária:</label>
+<div class="grid grid-cols-2 gap-2" role="radiogroup">
+<button class="touch-target px-3 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-left active:bg-slate-200 transition-colors" type="button">
+<span class="block text-xs font-bold text-slate-800">Criança</span>
+<span class="text-[11px] text-slate-500">0 a 12 anos</span>
+</button>
+<!-- Selected Age Button (Jovem 13 a 24) -->
+<button class="touch-target px-3 py-2.5 rounded-xl bg-brand-wine border border-brand-wine text-left text-white shadow-sm ring-2 ring-brand-wine/20" type="button">
+<span class="block text-xs font-bold text-white">Jovem</span>
+<span class="text-[11px] text-rose-200">13 a 24 anos</span>
+</button>
+<button class="touch-target px-3 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-left active:bg-slate-200 transition-colors" type="button">
+<span class="block text-xs font-bold text-slate-800">Adulto</span>
+<span class="text-[11px] text-slate-500">25 a 59 anos</span>
+</button>
+<button class="touch-target px-3 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-left active:bg-slate-200 transition-colors" type="button">
+<span class="block text-xs font-bold text-slate-800">Sênior</span>
+<span class="text-[11px] text-slate-500">60+ anos</span>
+</button>
+</div>
+</div>
+<!-- Subsection: Vínculo Institucional -->
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-2">Vínculo Institucional:</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+<!-- Selected Status: Público Geral / Visitante Externo -->
+<button class="touch-target px-3.5 py-2.5 rounded-xl bg-brand-gold-surface border-2 border-brand-gold text-slate-900 text-xs font-bold text-center active:opacity-90 transition-all" type="button">
+            Público Geral / Visitante Externo
+          </button>
+<button class="touch-target px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold text-center active:bg-slate-200 transition-colors" type="button">
+            Estudante UNICAP
+          </button>
+<button class="touch-target px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold text-center active:bg-slate-200 transition-colors" type="button">
+            Docente / Colaborador
+          </button>
+<button class="touch-target px-3.5 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold text-center active:bg-slate-200 transition-colors" type="button">
+            Egresso</button>
+</div>
+</div>
+</section>
+<!-- END: Section2_PerfilVisitante -->
+<!-- BEGIN: Section3_OrigemVisitante -->
+<!-- Seção 3: Localidade e Bairro -->
+<section class="bg-white rounded-2xl p-4 shadow-card-subtle border border-slate-200/70" data-purpose="visitor-origin-section">
+<div class="flex items-start justify-between mb-3.5">
+<div class="flex items-center space-x-3">
+<span class="flex items-center justify-center w-7 h-7 rounded-full bg-brand-wine text-white text-sm font-bold shadow-sm">3</span>
+<div>
+<h2 class="text-base font-bold text-slate-900 leading-tight">Origem do Visitante</h2>
+<p class="text-xs text-slate-500 mt-0.5">Mapeamento territorial de impacto cultural em Pernambuco</p>
+</div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-500">Obrigatório</span>
+</div>
+<!-- Step 3A: Unidade Federativa (UF) -->
+<div class="mb-3.5">
+<label class="block text-xs font-bold text-slate-700 mb-2">Unidade Federativa (UF):</label>
+<div class="flex flex-wrap gap-2">
+<!-- Pernambuco (Active) -->
+<button class="touch-target px-3.5 py-2 rounded-xl bg-brand-wine text-white text-xs font-bold shadow-sm" type="button">
+            Pernambuco (PE)
+          </button>
+<button class="touch-target px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium active:bg-slate-200" type="button">
+            Paraíba (PB)
+          </button>
+<button class="touch-target px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium active:bg-slate-200" type="button">
+            Alagoas (AL)
+          </button>
+<button class="touch-target px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium active:bg-slate-200" type="button">
+            Rio Grande do Norte (RN)
+          </button>
+<button class="touch-target px-3.5 py-2 rounded-xl bg-slate-100 text-slate-600 text-xs font-medium active:bg-slate-200" type="button">
+            Outro Estado / Internacional
+          </button>
+</div>
+</div>
+<!-- Step 3B: Município -->
+<div class="mb-3.5">
+<label class="block text-xs font-bold text-slate-700 mb-2">Município:</label>
+<div class="flex flex-wrap gap-2">
+<!-- Recife (Active) -->
+<button class="touch-target px-4 py-2 rounded-xl bg-brand-wine text-white text-xs font-bold shadow-sm" type="button">
+            Recife
+          </button>
+<button class="touch-target px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium active:bg-slate-200" type="button">
+            Olinda
+          </button>
+<button class="touch-target px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium active:bg-slate-200" type="button">
+            Jaboatão dos Guararapes
+          </button>
+<button class="touch-target px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium active:bg-slate-200" type="button">
+            Paulista
+          </button>
+<button class="touch-target px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium active:bg-slate-200" type="button">
+            Camaragibe
+          </button>
+<button class="touch-target px-3 py-2 rounded-xl bg-slate-100 text-slate-600 text-xs font-medium active:bg-slate-200" type="button">
+            Outro Município
+          </button>
+</div>
+</div>
+<!-- Step 3C: Bairro de Residência (Recife) -->
+<div class="p-3 bg-slate-50/80 rounded-xl border border-slate-200/60">
+<label class="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-2">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" aria-hidden="true" class="lucide lucide-map-pin w-3.5 h-3.5 text-brand-gold"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          Bairro de Residência (Recife):
+        </label>
+<div class="flex flex-wrap gap-1.5">
+<!-- Boa Vista (Selected) -->
+<button class="touch-target px-3 py-2 rounded-lg bg-brand-gold-surface border border-brand-gold text-slate-900 text-xs font-bold" type="button">
+            Boa Vista (Campus)
+          </button>
+<button class="touch-target px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-medium active:bg-slate-100" type="button">
+            Santo Amaro
+          </button>
+<button class="touch-target px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-medium active:bg-slate-100" type="button">
+            Soledade
+          </button>
+<button class="touch-target px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-medium active:bg-slate-100" type="button">
+            Graças
+          </button>
+<button class="touch-target px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-medium active:bg-slate-100" type="button">
+            Derby
+          </button>
+<button class="touch-target px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-medium active:bg-slate-100" type="button">
+            Espinheiro
+          </button>
+<button class="touch-target px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-medium active:bg-slate-100" type="button">
+            Casa Forte
+          </button>
+<button class="touch-target px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-600 text-xs font-medium active:bg-slate-100" type="button">
+            Outro Bairro
+          </button>
+</div>
+</div>
+</section>
+<!-- END: Section3_OrigemVisitante -->
+<!-- BEGIN: Section4_ConexaoCultural -->
+<!-- Seção 4: Contato & LGPD (Opcional) -->
+<section class="bg-white rounded-2xl p-4 shadow-card-subtle border border-slate-200/70" data-purpose="cultural-connection-section">
+<div class="flex items-start justify-between mb-3.5">
+<div class="flex items-center space-x-3">
+<span class="flex items-center justify-center w-7 h-7 rounded-full bg-slate-200 text-slate-700 text-sm font-bold shadow-sm">4</span>
+<div>
+<h2 class="text-base font-bold text-slate-900 leading-tight">Conexão Cultural UNICAP</h2>
+<p class="text-xs text-slate-500 mt-0.5">Receba convites de novas exposições, cursos e concertos</p>
+</div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-500">Opcional</span>
+</div>
+<!-- Form Inputs: Phone & Email -->
+<div class="space-y-3">
+<!-- WhatsApp -->
+<div>
+<label class="flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1" for="input-whatsapp">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="message-square" aria-hidden="true" class="lucide lucide-message-square w-3.5 h-3.5 text-slate-500"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>
+            WhatsApp ou Celular
+          </label>
+<input class="w-full h-12 px-3.5 rounded-xl border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:border-brand-wine focus:ring-brand-wine" id="input-whatsapp" placeholder="(81) 99999-9999" type="tel">
+</div>
+<!-- E-mail -->
+<div>
+<label class="flex items-center gap-1.5 text-xs font-semibold text-slate-700 mb-1" for="input-email">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="mail" aria-hidden="true" class="lucide lucide-mail w-3.5 h-3.5 text-slate-500"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>
+            E-mail Preferencial
+          </label>
+<input class="w-full h-12 px-3.5 rounded-xl border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:border-brand-wine focus:ring-brand-wine" id="input-email" placeholder="visitante@exemplo.com.br" type="email">
+</div>
+<!-- LGPD Terms Checkbox -->
+<label class="flex items-start gap-3 p-2.5 rounded-xl bg-slate-50/70 border border-slate-200/60 cursor-pointer text-left select-none">
+<input checked="" class="mt-1 w-4 h-4 rounded text-brand-wine focus:ring-brand-wine border-slate-300" type="checkbox">
+<span class="text-[11px] leading-relaxed text-slate-600">
+            Autorizo o envio esporádico do boletim quinzenal de lançamentos museológicos e atividades acadêmico-culturais da UNICAP, conforme os termos da Lei Geral de Proteção de Dados (LGPD).
+          </span>
+</label>
+</div>
+</section>
+<!-- END: Section4_ConexaoCultural -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomStickyActionFooter -->
+<!-- Fixed Mobile Touch Action Bar -->
+<aside aria-label="Ações de Conclusão" class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-sticky-bar z-50 p-3 pb-[max(12px,env(safe-area-inset-bottom))]">
+<div class="max-w-lg mx-auto flex items-center gap-2.5">
+<!-- Reset/Clear Button -->
+<button class="touch-target inline-flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold active:scale-95 transition-all shrink-0" type="button">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="eraser" aria-hidden="true" class="lucide lucide-eraser w-4 h-4 text-slate-500"><path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"></path><path d="m5.082 11.09 8.828 8.828"></path></svg>
+<span class="">Limpar</span>
+</button>
+<!-- Submit / Check-in Confirmation Button -->
+<button class="touch-target flex-1 flex items-center justify-between px-4 py-3.5 rounded-xl bg-brand-wine hover:bg-brand-wine-dark text-white shadow-md shadow-brand-wine/25 active:scale-[0.98] transition-all" type="button">
+<div class="text-left leading-tight">
+
+<span class="text-xs sm:text-sm font-bold">Concluir&nbsp;</span>
+</div>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-5 h-5 shrink-0 ml-2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+</button>
+</div>
+</aside>
+<!-- END: BottomStickyActionFooter -->
+<!-- BEGIN: RuntimeIconsInit -->
+<script data-purpose="initialize-lucide-icons">
+    document.addEventListener("DOMContentLoaded", function () {
+      lucide.createIcons();
+    });
+  </script>
+<!-- END: RuntimeIconsInit -->
+
+
+
+
+</body></html>

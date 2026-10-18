@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>Totem de Saída - Avaliação Quick-Touch | UNICAP</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            unicap: {
+              50: '#fdf3f4',
+              100: '#fae6e8',
+              200: '#f6d1d6',
+              500: '#b42639',
+              700: '#861525',
+              800: '#6e1220', // UNICAP Brand Wine
+              900: '#520e18',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Styles: Touch & Layout Optimizations -->
+<style data-purpose="totem-mobile-layout">
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Touch state animations */
+    .touch-card {
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .touch-card:active {
+      transform: scale(0.96);
+    }
+    .touch-card.is-selected {
+      border-color: #6e1220 !important;
+      background-color: #fdf3f4 !important;
+      box-shadow: 0 10px 25px -5px rgba(110, 18, 32, 0.15) !important;
+    }
+    .touch-tag {
+      transition: all 0.15s ease-in-out;
+    }
+    .touch-tag.is-active {
+      background-color: #6e1220;
+      color: #ffffff;
+      border-color: #6e1220;
+    }
+    .touch-tag.is-active svg {
+      stroke: #ffffff;
+    }
+  </style>
+</head>
+<body class="bg-[#faf7f5] text-stone-800 font-sans min-h-screen flex flex-col justify-between antialiased selection:bg-unicap-100">
+<!-- BEGIN: MainContent -->
+<main class="w-full max-w-md mx-auto px-4 pt-6 pb-6 flex-grow flex flex-col">
+<!-- BEGIN: HeaderSection -->
+<header class="text-center mb-6">
+<!-- Badge: Subtítulo de ação rápida -->
+<div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#f3ece8] text-stone-700 text-xs font-semibold tracking-tight shadow-sm border border-[#e8ded8] mb-3">
+<i class="w-3.5 h-3.5 text-unicap-800" data-lucide="sparkles"></i>
+<span>Avaliação Rápida na Saída • Toque para registrar em 1s</span>
+</div>
+<!-- Título de impacto -->
+<h1 class="text-2xl font-extrabold text-unicap-800 leading-tight tracking-tight px-1">
+        Como foi a sua experiência na visita ao Museu hoje?
+      </h1>
+<!-- Descrição institucional de acolhimento -->
+<p class="mt-2 text-xs sm:text-sm text-stone-600 leading-relaxed max-w-xs mx-auto">
+        Sua opinião espontânea orienta a conservação, a mediação educativa e a valorização da memória cultural de Pernambuco.
+      </p>
+</header>
+<!-- END: HeaderSection -->
+<!-- BEGIN: FeedbackRatingScale -->
+<!-- Escala Likert de 5 níveis com scroll horizontal suave ou grid responsivo -->
+<section aria-label="Escala de Avaliação" class="mb-6">
+<div class="grid grid-cols-5 gap-2 sm:gap-2.5">
+<!-- Nível 1: Muito Ruim -->
+<button class="touch-card flex flex-col items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-white border-2 border-stone-100 shadow-sm shadow-stone-200/60 focus:outline-none" data-level="1" data-purpose="rating-card" type="button">
+<div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-rose-50 flex items-center justify-center text-rose-500 mb-2 border border-rose-100">
+<i class="w-6 h-6" data-lucide="frown"></i>
+</div>
+<div class="text-center w-full">
+<span class="block text-[11px] sm:text-xs font-bold text-stone-800 leading-tight">Muito Ruim</span>
+<span class="block text-[9px] text-stone-500 mt-0.5 leading-none">Frustrante</span>
+</div>
+<div class="w-1.5 h-1.5 rounded-full bg-stone-300 mt-2 card-indicator"></div>
+</button>
+<!-- Nível 2: Ruim -->
+<button class="touch-card flex flex-col items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-white border-2 border-stone-100 shadow-sm shadow-stone-200/60 focus:outline-none" data-level="2" data-purpose="rating-card" type="button">
+<div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 mb-2 border border-amber-100">
+<i class="w-6 h-6" data-lucide="meh"></i>
+</div>
+<div class="text-center w-full">
+<span class="block text-[11px] sm:text-xs font-bold text-stone-800 leading-tight">Ruim</span>
+<span class="block text-[9px] text-stone-500 mt-0.5 leading-none">Insatisfatória</span>
+</div>
+<div class="w-1.5 h-1.5 rounded-full bg-stone-300 mt-2 card-indicator"></div>
+</button>
+<!-- Nível 3: Regular -->
+<button class="touch-card flex flex-col items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-white border-2 border-stone-100 shadow-sm shadow-stone-200/60 focus:outline-none" data-level="3" data-purpose="rating-card" type="button">
+<div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-600 mb-2 border border-yellow-100">
+<i class="w-6 h-6" data-lucide="minus-circle"></i>
+</div>
+<div class="text-center w-full">
+<span class="block text-[11px] sm:text-xs font-bold text-stone-800 leading-tight">Regular</span>
+<span class="block text-[9px] text-stone-500 mt-0.5 leading-none">Mediana</span>
+</div>
+<div class="w-1.5 h-1.5 rounded-full bg-stone-300 mt-2 card-indicator"></div>
+</button>
+<!-- Nível 4: Boa -->
+<button class="touch-card flex flex-col items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-white border-2 border-stone-100 shadow-sm shadow-stone-200/60 focus:outline-none" data-level="4" data-purpose="rating-card" type="button">
+<div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 mb-2 border border-emerald-100">
+<i class="w-6 h-6" data-lucide="smile"></i>
+</div>
+<div class="text-center w-full">
+<span class="block text-[11px] sm:text-xs font-bold text-stone-800 leading-tight">Boa</span>
+<span class="block text-[9px] text-stone-500 mt-0.5 leading-none">Agradável</span>
+</div>
+<div class="w-1.5 h-1.5 rounded-full bg-stone-300 mt-2 card-indicator"></div>
+</button>
+<!-- Nível 5: Excelente -->
+<button class="touch-card flex flex-col items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-white border-2 border-stone-100 shadow-sm shadow-stone-200/60 focus:outline-none" data-level="5" data-purpose="rating-card" type="button">
+<div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-unicap-50 flex items-center justify-center text-unicap-800 mb-2 border border-unicap-100">
+<i class="w-6 h-6 fill-unicap-800/10" data-lucide="heart"></i>
+</div>
+<div class="text-center w-full">
+<span class="block text-[11px] sm:text-xs font-bold text-stone-800 leading-tight">Excelente</span>
+<span class="block text-[9px] text-stone-500 mt-0.5 leading-none">Marcante</span>
+</div>
+<div class="w-1.5 h-1.5 rounded-full bg-stone-300 mt-2 card-indicator"></div>
+</button>
+</div>
+</section>
+<!-- END: FeedbackRatingScale -->
+<!-- BEGIN: HighlightAspectsSection -->
+<!-- Bloco de Tags de Destaque -->
+<section class="bg-white/90 backdrop-blur-sm rounded-3xl p-4 sm:p-5 border border-stone-200/80 shadow-sm shadow-stone-200/40 mb-6" data-purpose="highlight-aspects">
+<div class="mb-3.5">
+<div class="flex items-center gap-1.5 text-stone-800 font-bold text-xs sm:text-sm">
+<i class="w-4 h-4 text-unicap-800" data-lucide="shapes"></i>
+<span>O que mais chamou sua atenção?</span>
+<span class="text-[10px] sm:text-xs font-normal text-stone-500">(Opcional)</span>
+</div>
+<p class="text-[11px] text-stone-500 mt-0.5 pl-5">
+          Toque nas tags para destacar pontos positivos ou de melhoria:
+        </p>
+</div>
+<!-- Grade de Tags Táteis -->
+<div aria-label="Tags de avaliação da experiência" class="grid grid-cols-2 gap-2" role="group">
+<!-- Tag 1 -->
+<button class="touch-tag flex items-center gap-2 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50/80 text-stone-700 text-xs font-medium focus:outline-none" data-purpose="aspect-tag" type="button">
+<i class="w-4 h-4 text-stone-600 flex-shrink-0" data-lucide="landmark"></i>
+<span class="truncate">Acervo Histórico</span>
+</button>
+<!-- Tag 2 -->
+<button class="touch-tag flex items-center gap-2 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50/80 text-stone-700 text-xs font-medium focus:outline-none" data-purpose="aspect-tag" type="button">
+<i class="w-4 h-4 text-stone-600 flex-shrink-0" data-lucide="users"></i>
+<span class="truncate">Monitores &amp; Guias</span>
+</button>
+<!-- Tag 3 -->
+<button class="touch-tag flex items-center gap-2 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50/80 text-stone-700 text-xs font-medium focus:outline-none" data-purpose="aspect-tag" type="button">
+<i class="w-4 h-4 text-stone-600 flex-shrink-0" data-lucide="accessibility"></i>
+<span class="truncate">Acessibilidade</span>
+</button>
+<!-- Tag 4 -->
+<button class="touch-tag flex items-center gap-2 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50/80 text-stone-700 text-xs font-medium focus:outline-none" data-purpose="aspect-tag" type="button">
+<i class="w-4 h-4 text-stone-600 flex-shrink-0" data-lucide="fan"></i>
+<span class="truncate">Climatização</span>
+</button>
+<!-- Tag 5 -->
+<button class="touch-tag flex items-center gap-2 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50/80 text-stone-700 text-xs font-medium focus:outline-none" data-purpose="aspect-tag" type="button">
+<i class="w-4 h-4 text-stone-600 flex-shrink-0" data-lucide="sun-medium"></i>
+<span class="truncate">Iluminação</span>
+</button>
+<!-- Tag 6 -->
+<button class="touch-tag flex items-center gap-2 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50/80 text-stone-700 text-xs font-medium focus:outline-none" data-purpose="aspect-tag" type="button">
+<i class="w-4 h-4 text-stone-600 flex-shrink-0" data-lucide="building"></i>
+<span class="truncate">Arquitetura</span>
+</button>
+<!-- Tag 7 -->
+<button class="touch-tag flex items-center gap-2 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50/80 text-stone-700 text-xs font-medium focus:outline-none" data-purpose="aspect-tag" type="button">
+<i class="w-4 h-4 text-stone-600 flex-shrink-0" data-lucide="book-open"></i>
+<span class="truncate">Curadoria Pedagógica</span>
+</button>
+<!-- Tag 8 -->
+<button class="touch-tag flex items-center gap-2 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50/80 text-stone-700 text-xs font-medium focus:outline-none" data-purpose="aspect-tag" type="button">
+<i class="w-4 h-4 text-stone-600 flex-shrink-0" data-lucide="git-branch"></i>
+<span class="truncate">Sinalização de Rotas</span>
+</button>
+</div>
+</section>
+<!-- END: HighlightAspectsSection -->
+<!-- BEGIN: TerminalStatus -->
+<div class="flex flex-col sm:flex-row items-center justify-between text-[11px] text-stone-500 gap-2 mb-2 px-1 text-center sm:text-left">
+<div class="flex items-center justify-center gap-1.5">
+<i class="w-3.5 h-3.5 text-emerald-600" data-lucide="shield-check"></i>
+<span>Totem público • Sem cadastro nem coleta de dados pessoais</span>
+</div>
+<div class="flex items-center justify-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-medium text-stone-600">Terminal Ativo • Espaço Cultural UNICAP</span>
+</div>
+</div>
+<!-- END: TerminalStatus -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: InstitutionalFooter -->
+<footer class="w-full bg-[#f0eae5] border-t border-[#e2d7cf] py-3.5 px-4 mt-auto">
+<div class="max-w-md mx-auto flex flex-col items-center gap-2 text-center text-xs text-stone-600">
+<!-- Marca UNICAP e Endereço -->
+<div class="flex flex-wrap items-center justify-center gap-1.5">
+<span class="font-extrabold text-unicap-800 tracking-wider">UNICAP</span>
+<span class="text-stone-400">•</span>
+<span class="text-[11px]">Universidade Católica de Pernambuco</span>
+</div>
+<p class="text-[10px] text-stone-500">
+        Rua do Príncipe, 526, Boa Vista, Recife - PE
+      </p>
+<!-- Links Institucionais Rápidos -->
+<nav aria-label="Links Institucionais" class="flex items-center justify-center gap-4 pt-1 text-[11px] text-stone-700 font-medium">
+<a class="hover:text-unicap-800 transition-colors" href="#acessibilidade">Acessibilidade</a>
+<span class="text-stone-300">•</span>
+<a class="hover:text-unicap-800 transition-colors" href="#livro-de-visitas">Livro de Visitas</a>
+<span class="text-stone-300">•</span>
+<a class="hover:text-unicap-800 transition-colors" href="#plano-museologico">Plano Museológico</a>
+</nav>
+</div>
+</footer>
+<!-- END: InstitutionalFooter -->
+<!-- JavaScript: Quick-Touch Interactivity -->
+<script data-purpose="totem-touch-interactions">
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Lucide Icons
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+
+      // Handling Likert Cards selection
+      const ratingCards = document.querySelectorAll('[data-purpose="rating-card"]');
+      ratingCards.forEach(card => {
+        card.addEventListener('click', () => {
+          ratingCards.forEach(c => {
+            c.classList.remove('is-selected');
+            const ind = c.querySelector('.card-indicator');
+            if (ind) ind.classList.replace('bg-unicap-800', 'bg-stone-300');
+          });
+          card.classList.add('is-selected');
+          const indicator = card.querySelector('.card-indicator');
+          if (indicator) {
+            indicator.classList.replace('bg-stone-300', 'bg-unicap-800');
+          }
+        });
+      });
+
+      // Handling Multiple Tag selection
+      const aspectTags = document.querySelectorAll('[data-purpose="aspect-tag"]');
+      aspectTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+          tag.classList.toggle('is-active');
+        });
+      });
+    });
+  </script>
+</body></html>

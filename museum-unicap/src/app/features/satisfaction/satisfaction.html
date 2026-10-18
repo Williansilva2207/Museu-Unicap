@@ -1,0 +1,159 @@
+<main class="page satisfaction-page">
+  <!-- Institutional kiosk header -->
+  <header class="satisfaction-header">
+    <div class="row">
+      <span class="brand-mark" aria-hidden="true">
+        <span class="icon icon-24">museum</span>
+      </span>
+      <div class="stack-xs">
+        <p class="t-headline-sm text-primary">UNICAP</p>
+        <p class="t-caption overline-gold">Espaço Cultural • Museu</p>
+      </div>
+    </div>
+    <span class="badge badge--gold">
+      <span class="pulse-dot" aria-hidden="true"></span>
+      Quiosque de Saída
+    </span>
+  </header>
+
+  <!-- Central touch call -->
+  <section class="satisfaction-intro">
+    <span class="badge badge--tonal">
+      <span class="icon icon-16" aria-hidden="true">touch_app</span>
+      Avaliação rápida e anônima
+    </span>
+    <h1 class="t-headline-lg intro-title">
+      Como foi a sua experiência na visita ao Museu hoje?
+    </h1>
+    <p class="t-body-md text-muted">
+      Sua opinião nos ajuda a preservar e valorizar nossa memória cultural.
+    </p>
+  </section>
+
+  <form (submit)="onSubmit($event)" novalidate>
+    <!-- Likert quick-touch scale (1–5) -->
+    <fieldset class="likert-fieldset">
+      <legend class="t-label-lg field-label">Nota da experiência</legend>
+      <div class="likert-grid" role="radiogroup" aria-label="Nota de 1 (Muito Ruim) a 5 (Excelente)">
+        @for (option of ratingOptions; track option.value) {
+          <label
+            class="choice choice--card likert-option"
+            [class.likert-option--top]="option.value === 5"
+          >
+            <input
+              type="radio"
+              [value]="option.radioValue"
+              [attr.aria-label]="option.label + ' — nota ' + option.value"
+              [formField]="satisfactionForm.rating"
+            />
+            <span class="likert-face" aria-hidden="true">{{ option.emoji }}</span>
+            <span class="likert-label t-label-lg">{{ option.label }}</span>
+            <span class="likert-caption t-caption text-muted">{{ option.caption }}</span>
+          </label>
+        }
+      </div>
+      @if (attempted() && satisfactionForm.rating().invalid()) {
+        <p class="field-error" role="alert">
+          <span class="icon icon-16" aria-hidden="true">error</span>
+          {{ satisfactionForm.rating().errors()[0]?.message }}
+        </p>
+      }
+    </fieldset>
+
+    <!-- Optional highlight topics (from the back end) -->
+    <section class="topics card">
+      <header class="row topics-header">
+        <span class="icon icon-24 text-gold" aria-hidden="true">auto_awesome</span>
+        <h2 class="t-title-lg">O que mais chamou sua atenção?</h2>
+        <span class="badge badge--optional topics-optional">Opcional</span>
+      </header>
+      <p class="t-body-md text-muted topics-hint">
+        Selecione um ou mais pontos marcantes da sua visitação:
+      </p>
+
+      @if (topics() === undefined) {
+        <p class="row t-label-md text-muted">
+          <span class="icon spin" aria-hidden="true">progress_activity</span>
+          Carregando tópicos…
+        </p>
+      } @else if (topics() === null) {
+        <p class="feedback feedback--info">
+          <span class="icon icon-18" aria-hidden="true">wifi_off</span>
+          Não foi possível carregar os tópicos agora. Você ainda pode enviar sua nota.
+        </p>
+      } @else {
+        <div class="chip-row topics-chips">
+          @for (topic of topics(); track topic.id) {
+            <label class="choice choice--pill topics-chip">
+              <input
+                type="checkbox"
+                [attr.aria-label]="topic.label"
+                [checked]="isTopicSelected(topic.id)"
+                (change)="toggleTopic(topic, $event)"
+              />
+              <span class="icon icon-18" aria-hidden="true">{{ topic.icon }}</span>
+              {{ topic.label }}
+            </label>
+          }
+        </div>
+      }
+    </section>
+
+    @if (submitError(); as message) {
+      <p class="feedback feedback--error" role="alert">
+        <span class="icon icon-18" aria-hidden="true">cloud_off</span>
+        {{ message }}
+      </p>
+    }
+
+    <!-- Submission -->
+    <button class="btn btn--primary submit-button" type="submit" [disabled]="submitting()">
+      @if (submitting()) {
+        <span class="icon spin" aria-hidden="true">progress_activity</span>
+        Registrando avaliação…
+      } @else {
+        <span class="icon" aria-hidden="true">send</span>
+        Enviar Avaliação
+      }
+    </button>
+  </form>
+
+  <!-- Institutional & privacy footer -->
+  <footer class="satisfaction-footer">
+    <p class="row t-caption text-muted privacy-note">
+      <span class="icon icon-16 text-gold" aria-hidden="true">verified_user</span>
+      Totem interativo sem coleta de dados pessoais • UNICAP Cultural
+    </p>
+    <p class="t-caption" style="color: var(--outline)">
+      Recife, PE • Universidade Católica de Pernambuco
+    </p>
+  </footer>
+</main>
+
+<!-- Thank-you dialog with automatic kiosk reset -->
+<app-modal
+  [open]="successResponse() !== null"
+  dialogLabel="Avaliação registrada"
+  (closed)="resetTotem()"
+>
+  <div class="modal-icon" aria-hidden="true">
+    <span class="icon icon-44">favorite</span>
+  </div>
+  <div class="stack-xs">
+    <h2 class="t-headline-md">Muito obrigado!</h2>
+    <p class="t-body-md text-muted">
+      Sua avaliação foi registrada com sucesso. Tenha um excelente dia!
+    </p>
+  </div>
+  <div class="countdown-box">
+    <p class="row t-label-lg text-primary">
+      <span class="icon icon-24 spin" aria-hidden="true">progress_activity</span>
+      Resetando para o próximo visitante em
+      <strong class="text-primary">{{ countdown() }}s</strong>…
+    </p>
+  </div>
+  <button class="btn btn--primary" type="button" (click)="resetTotem()">
+    <span class="icon icon-18" aria-hidden="true">restart_alt</span>
+    Concluir Agora
+  </button>
+</app-modal>

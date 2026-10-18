@@ -1,0 +1,16 @@
+@if (open()) {
+  <div class="modal-overlay" (click)="onCloseRequest()">
+    <div
+      #dialog
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="dialogLabel()"
+      tabindex="-1"
+      (click)="$event.stopPropagation()"
+      (keydown.escape)="onCloseRequest()"
+    >
+      <ng-content />
+    </div>
+  </div>
+}

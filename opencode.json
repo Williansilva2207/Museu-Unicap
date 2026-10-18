@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "angular": {
+        "type": "local",
+        "command": [
+          "cmd.exe",
+          "/d",
+          "/s",
+          "/c",
+          "C:\\Users\\willi\\tools\\angular-mcp\\node_modules\\.bin\\ng.cmd mcp"
+        ],
+        "timeout": {
+          "startup": 60000,
+          "catalog": 60000
+        }
+      }
+    }
+  }
+}

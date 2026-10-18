@@ -1,0 +1,507 @@
+<!-- Top navigation bar -->
+<header class="admin-header">
+  <div class="page admin-header-inner">
+    <div class="row admin-brand">
+      <span class="admin-logo" aria-hidden="true">U</span>
+      <div>
+        <div class="row admin-brand-row">
+          <span class="admin-brand-name">UNICAP</span>
+          <span class="badge badge--gold">Portal de Gestão</span>
+        </div>
+        <span class="t-caption text-muted">Espaço Cultural e Museu Universitário</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav" aria-label="Seções do painel">
+      <span class="admin-nav-item admin-nav-item--active">Dashboard Geral</span>
+      <a class="admin-nav-item" href="#satisfacao">Satisfação</a>
+      <a class="admin-nav-item" href="#pedagogico">Pedagógico</a>
+      <a class="admin-nav-item" href="#contatos">Contatos (LGPD)</a>
+    </nav>
+
+    <div class="row admin-profile">
+      <div class="admin-profile-info">
+        <p class="t-label-md">{{ session()?.name ?? 'Gestão' }}</p>
+        <p class="t-caption text-muted">{{ session()?.email ?? 'portal de gestão' }}</p>
+      </div>
+      <span class="admin-avatar" aria-hidden="true">
+        <span class="icon icon-18">account_circle</span>
+      </span>
+      <button
+        class="btn btn--tonal btn--compact"
+        type="button"
+        (click)="logout()"
+      >
+        <span class="icon icon-18" aria-hidden="true">logout</span>
+        <span class="sr-only">Sair do Portal</span>
+        Sair
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="page admin-main">
+  @if (demoModeActive) {
+    <p class="badge badge--demo demo-badge">
+      <span class="icon icon-16" aria-hidden="true">science</span>
+      Modo demonstração — dados simulados
+    </p>
+  }
+
+  @if (isLoading()) {
+    <div class="admin-state row" role="status">
+      <span class="icon icon-32 spin" aria-hidden="true">progress_activity</span>
+      <p class="t-label-lg text-muted">Carregando indicadores…</p>
+    </div>
+  } @else if (loadFailed()) {
+    <div class="admin-state stack-sm">
+      <p class="feedback feedback--error" role="alert">
+        <span class="icon icon-18" aria-hidden="true">cloud_off</span>
+        Não foi possível carregar os indicadores do painel agora.
+      </p>
+      <p class="t-caption text-muted">
+        Verifique a conexão com o servidor e recarregue a página para tentar
+        novamente.
+      </p>
+    </div>
+  } @else if (summary(); as data) {
+    <!-- Executive header & quick actions -->
+    <section class="card exec-header">
+      <div class="stack-sm">
+        <p class="t-caption overline-gold exec-overline">
+          <span class="icon icon-16" aria-hidden="true">analytics</span>
+          Observatório Cultural UNICAP • Recife
+        </p>
+        <h1 class="t-headline-md exec-title">Painel de Inteligência Museal & Gestão</h1>
+        <p class="t-body-md text-muted exec-text">
+          Consolidação estratégica das informações coletadas nos totens de
+          recepção, saída e formulários de mediação pedagógica da Universidade
+          Católica de Pernambuco.
+        </p>
+      </div>
+      <div class="row exec-actions">
+        <label class="period-select row">
+          <span class="icon icon-18 text-primary" aria-hidden="true">calendar_today</span>
+          <span class="sr-only">Período de referência</span>
+          <select
+            (change)="showPendingActionNotice('Filtro de período')"
+            aria-label="Período de referência"
+          >
+            <option selected>Semestre Atual</option>
+            <option>Últimos 30 Dias</option>
+            <option>Ano Letivo 2025</option>
+          </select>
+        </label>
+        <button
+          class="btn btn--primary btn--compact"
+          type="button"
+          (click)="showPendingActionNotice('Exportar PDF')"
+        >
+          <span class="icon icon-18" aria-hidden="true">picture_as_pdf</span>
+          Exportar PDF
+        </button>
+        <button
+          class="btn btn--gold btn--compact"
+          type="button"
+          (click)="showPendingActionNotice('Exportar CSV')"
+        >
+          <span class="icon icon-18" aria-hidden="true">table_view</span>
+          CSV Dados
+        </button>
+      </div>
+    </section>
+
+    @if (pendingActionNotice(); as notice) {
+      <p class="feedback feedback--info" role="status">
+        <span class="icon icon-18" aria-hidden="true">info</span>
+        {{ notice }}
+      </p>
+    }
+
+    <!-- 1. Executive KPIs -->
+    <section class="kpi-grid" aria-label="Indicadores executivos">
+      <article class="card kpi">
+        <header class="row kpi-head">
+          <span class="t-caption text-muted kpi-label">Acessos Registrados</span>
+          <span class="kpi-icon kpi-icon--primary">
+            <span class="icon icon-18" aria-hidden="true">groups</span>
+          </span>
+        </header>
+        <div class="stack-xs">
+          <p class="t-display-kiosk kpi-value kpi-value--primary">
+            {{ data.totalVisits | number: '3.0-0' }}
+          </p>
+          <p class="t-caption kpi-trend">
+            <span class="icon icon-16" aria-hidden="true">trending_up</span>
+            +{{ data.totalVisitsTrendPct | number: '1.1-1' }}% vs. ciclo anterior
+          </p>
+        </div>
+      </article>
+
+      <article class="card kpi">
+        <header class="row kpi-head">
+          <span class="t-caption text-muted kpi-label">Escolas Atendidas</span>
+          <span class="kpi-icon kpi-icon--gold">
+            <span class="icon icon-18" aria-hidden="true">school</span>
+          </span>
+        </header>
+        <div class="stack-xs">
+          <p class="t-display-kiosk kpi-value">{{ data.schoolsServed }}</p>
+          <p class="t-caption text-muted">
+            <strong class="kpi-strong">
+              {{ data.studentsMediated | number: '3.0-0' }} estudantes
+            </strong>
+            mediados no acervo
+          </p>
+        </div>
+      </article>
+
+      <article class="card kpi">
+        <header class="row kpi-head">
+          <span class="t-caption text-muted kpi-label">Satisfação Geral</span>
+          <span class="kpi-icon kpi-icon--success">
+            <span class="icon icon-18" aria-hidden="true">sentiment_very_satisfied</span>
+          </span>
+        </header>
+        <div class="stack-xs">
+          <p class="row kpi-rating-row">
+            <span class="t-display-kiosk kpi-value kpi-value--success">
+              {{ data.satisfactionPositivePct | number: '1.0-1' }}%
+            </span>
+            <span class="t-caption kpi-sub">
+              {{ data.averageRating | number: '1.0-1' }} / 5.0
+            </span>
+          </p>
+          <p class="t-caption text-muted">Avaliações positivas nos totens</p>
+        </div>
+      </article>
+
+      <article class="card kpi">
+        <header class="row kpi-head">
+          <span class="t-caption text-muted kpi-label">Mailing & Opt-in LGPD</span>
+          <span class="kpi-icon kpi-icon--primary">
+            <span class="icon icon-18" aria-hidden="true">mark_email_read</span>
+          </span>
+        </header>
+        <div class="stack-xs">
+          <p class="t-display-kiosk kpi-value">{{ data.contactsOptIn }}</p>
+          <p class="t-caption text-muted">
+            <strong class="kpi-strong kpi-strong--primary">
+              {{ data.contactsOptInPct | number: '1.0-1' }}%
+            </strong>
+            conversão nos totens táteis
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- 2. Demographics & origin -->
+    <section id="demografia" class="stack">
+      <header class="section-head row">
+        <span class="section-bar" aria-hidden="true"></span>
+        <h2 class="t-headline-sm">Perfil Demográfico & Origem dos Visitantes</h2>
+        <span class="badge badge--tonal">Dados do Totem de Entrada</span>
+      </header>
+
+      <div class="demo-grid">
+        <article class="card chart-card">
+          <header class="row chart-head">
+            <h3 class="t-label-lg chart-title">
+              <span class="icon icon-18 text-primary" aria-hidden="true">cake</span>
+              Distribuição por Faixa Etária
+            </h3>
+          </header>
+          <div class="stack-sm">
+            @for (row of ageDistributionRows(); track row.range) {
+              <div class="bar-row">
+                <div class="row bar-meta">
+                  <span class="t-label-md bar-label">{{ row.label }}</span>
+                  <span class="t-label-md bar-value">
+                    {{ row.percentage }}%
+                    <span class="t-caption text-muted">({{ row.count | number: '3.0-0' }})</span>
+                  </span>
+                </div>
+                <div class="bar-track">
+                  <div
+                    class="bar-fill"
+                    [class.bar-fill--gold]="row.range === 'adulto'"
+                    [style.width.%]="row.percentage"
+                  ></div>
+                </div>
+              </div>
+            }
+          </div>
+        </article>
+
+        <article class="card chart-card">
+          <h3 class="t-label-lg chart-title">
+            <span class="icon icon-18 text-gold" aria-hidden="true">pie_chart</span>
+            Modalidade da Visita
+          </h3>
+          <p class="t-caption text-muted">Composição dos grupos de acolhimento</p>
+          <div class="stack-sm">
+            @for (entry of data.visitTypeShare; track entry.label) {
+              <div class="row share-row">
+                <span class="share-dot" [class.share-dot--gold]="entry.label === 'Individual / Espontânea'" aria-hidden="true"></span>
+                <span class="t-label-md share-label">{{ entry.label }}</span>
+                <span class="t-label-lg share-value">{{ entry.percentage }}%</span>
+              </div>
+            }
+          </div>
+        </article>
+
+        <article class="card chart-card">
+          <header class="row chart-head">
+            <h3 class="t-label-lg chart-title">
+              <span class="icon icon-18 text-primary" aria-hidden="true">explore</span>
+              Origem Territorial
+            </h3>
+            <span class="badge badge--gold">RMR & PE</span>
+          </header>
+          <p class="t-caption text-muted">Cidades com maior incidência de visitantes</p>
+          <ol class="stack-xs ranking-list">
+            @for (entry of data.cityRanking; track entry.label; let index = $index) {
+              <li class="row ranking-row">
+                <span class="t-label-md">{{ index + 1 }}. {{ entry.label }}</span>
+                <span class="t-label-md ranking-value">{{ entry.percentage }}%</span>
+              </li>
+            }
+          </ol>
+          <p class="t-caption text-muted ranking-caption">Bairros com maior fluxo no Recife:</p>
+          <div class="chip-row">
+            @for (entry of data.neighborhoodHighlights; track entry.label; let index = $index) {
+              <span
+                class="badge"
+                [class.badge--gold]="index === 0"
+                [class.badge--tonal]="index !== 0"
+              >
+                {{ entry.label }} {{ entry.percentage }}%
+              </span>
+            }
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 3. Satisfaction & topics -->
+    <section id="satisfacao" class="stack">
+      <header class="section-head row">
+        <span class="section-bar section-bar--gold" aria-hidden="true"></span>
+        <h2 class="t-headline-sm">Avaliação de Satisfação & Tópicos Mais Elogiados</h2>
+        <span class="badge badge--tonal">Dados do Totem de Saída</span>
+      </header>
+
+      <div class="satisfaction-grid">
+        <article class="card chart-card">
+          <header class="row chart-head">
+            <h3 class="t-label-lg chart-title">
+              <span class="icon icon-18 text-primary" aria-hidden="true">thumb_up</span>
+              Escala Likert de Experiência (5 Níveis)
+            </h3>
+            <span class="badge badge--success">
+              {{ data.satisfactionPositivePct }}% Aprovação
+            </span>
+          </header>
+          <div class="likert-summary">
+            @for (entry of data.ratingDistribution; track entry.rating) {
+              <div class="likert-cell likert-cell--r{{ entry.rating }}">
+                <span class="icon icon-32" aria-hidden="true">{{ ratingIcons[entry.rating] }}</span>
+                <span class="t-label-lg likert-cell-value">{{ entry.percentage }}%</span>
+                <span class="t-caption likert-cell-caption">
+                  {{ entry.count | number: '3.0-0' }} votos
+                </span>
+              </div>
+            }
+          </div>
+          <div class="rating-bar" role="img" aria-label="Distribuição percentual das notas de 1 a 5">
+            @for (entry of data.ratingDistribution; track entry.rating) {
+              <span class="rating-segment rating-segment--r{{ entry.rating }}" [style.width.%]="entry.percentage"></span>
+            }
+          </div>
+        </article>
+
+        <article class="card chart-card">
+          <header class="row chart-head">
+            <h3 class="t-label-lg chart-title">
+              <span class="icon icon-18 text-gold" aria-hidden="true">stars</span>
+              Tópicos de Maior Interesse
+            </h3>
+            <span class="t-caption text-muted">Múltipla escolha voluntária</span>
+          </header>
+          <div class="stack-sm">
+            @for (topic of data.topTopics; track topic.topicId) {
+              <div class="row topic-row">
+                <span class="icon icon-18 text-primary" aria-hidden="true">{{ topic.icon }}</span>
+                <span class="t-label-md topic-label">{{ topic.label }}</span>
+                <span class="t-caption text-muted">{{ topic.mentions | number: '3.0-0' }}</span>
+                <span class="badge badge--tonal topic-share">{{ topic.percentage }}%</span>
+              </div>
+            }
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 4. Pedagogical impact -->
+    <section id="pedagogico" class="stack">
+      <header class="section-head row">
+        <span class="section-bar" aria-hidden="true"></span>
+        <h2 class="t-headline-sm">Indicadores Pedagógicos & Extensão Universitária</h2>
+        <span class="badge badge--tonal">Formulário de Professores & Escolas</span>
+      </header>
+
+      <div class="pedagogical-grid">
+        <article class="card kpi">
+          <p class="t-caption text-muted kpi-label">Adequação Curricular</p>
+          <p class="row kpi-rating-row">
+            <span class="t-display-kiosk kpi-value kpi-value--primary">
+              {{ data.pedagogical.curriculumAlignmentAvg | number: '1.0-1' }}
+            </span>
+            <span class="t-caption kpi-sub">/ 5.0</span>
+          </p>
+          <p class="t-caption text-muted">
+            Conexão direta com conteúdos de História, Artes e Sociedade.
+          </p>
+        </article>
+
+        <article class="card kpi">
+          <p class="t-caption text-muted kpi-label">Mediação dos Monitores</p>
+          <p class="t-display-kiosk kpi-value kpi-value--gold">
+            {{ data.pedagogical.mediatorsExcellentPct }}%
+          </p>
+          <p class="t-caption text-muted">
+            Escolas avaliaram a mediação como excelente.
+          </p>
+        </article>
+
+        <article class="card kpi">
+          <p class="t-caption text-muted kpi-label">Redes de Ensino</p>
+          <div class="stack-xs network-list">
+            @for (entry of data.pedagogical.networkShare; track entry.label) {
+              <div class="row network-row">
+                <span class="t-caption">{{ entry.label }}:</span>
+                <span class="t-caption network-value">{{ entry.percentage }}%</span>
+              </div>
+            }
+          </div>
+        </article>
+
+        <article class="card kpi">
+          <p class="t-caption text-muted kpi-label">Renovação de Visitas</p>
+          <p class="t-display-kiosk kpi-value kpi-value--success">
+            {{ data.pedagogical.futureVisitsInterestPct }}%
+          </p>
+          <p class="t-caption text-muted">Desejam agendar novas turmas</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 5. Opt-in contacts (LGPD) -->
+    <section id="contatos" class="stack">
+      <header class="section-head row">
+        <span class="section-bar section-bar--gold" aria-hidden="true"></span>
+        <h2 class="t-headline-sm">Contatos de Visitantes & Docentes (Opt-in LGPD)</h2>
+        <span class="badge badge--success">
+          <span class="icon icon-16" aria-hidden="true">verified_user</span>
+          Consentimento registrado
+        </span>
+      </header>
+
+      <div class="card contacts-card">
+        <div class="table-scroll">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Identificação</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Telefone / WhatsApp</th>
+                <th scope="col">E-mail Cadastrado</th>
+                <th scope="col">Origem</th>
+                <th scope="col">Data Check-in</th>
+                <th scope="col">Status LGPD</th>
+                <th scope="col">Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (record of contacts()?.items ?? []; track record.id) {
+                <tr>
+                  <td>
+                    <p class="t-label-md contact-name">{{ record.name }}</p>
+                    <p class="t-caption text-muted">{{ record.detail }}</p>
+                  </td>
+                  <td>
+                    <span class="badge badge--cat badge--cat-{{ record.category }}">
+                      {{ record.category }}
+                    </span>
+                  </td>
+                  <td class="t-label-md">{{ record.phone }}</td>
+                  <td class="t-label-md text-muted">{{ record.email }}</td>
+                  <td class="t-label-md">{{ record.origin }}</td>
+                  <td class="t-label-md text-muted">{{ formatDateTime(record.checkedInAt) }}</td>
+                  <td>
+                    @if (record.consent) {
+                      <span class="badge badge--success">
+                        <span class="icon icon-16" aria-hidden="true">check_circle</span>
+                        Autorizado
+                      </span>
+                    } @else {
+                      <span class="badge badge--tonal">Sem autorização</span>
+                    }
+                  </td>
+                  <td>
+                    <button
+                      class="contact-action"
+                      type="button"
+                      (click)="showPendingActionNotice('Ver Ficha')"
+                    >
+                      Ver Ficha
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="row contacts-footer">
+          @if (contacts(); as page) {
+            <span class="t-caption text-muted">
+              Exibindo {{ page.items.length }} de {{ page.total }} contatos cadastrados
+            </span>
+            <div class="row">
+              <button
+                class="btn btn--tonal btn--compact"
+                type="button"
+                [disabled]="page.page <= 1"
+                (click)="goToContactsPage(page.page - 1)"
+              >
+                Anterior
+              </button>
+              <span class="t-caption text-muted">Página {{ page.page }}</span>
+              <button
+                class="btn btn--tonal btn--compact"
+                type="button"
+                [disabled]="page.page * page.pageSize >= page.total"
+                (click)="goToContactsPage(page.page + 1)"
+              >
+                Próxima
+              </button>
+            </div>
+          } @else {
+            <span class="t-caption text-muted">Carregando contatos…</span>
+          }
+        </footer>
+      </div>
+    </section>
+  }
+</main>
+
+<!-- Institutional footer -->
+<footer class="admin-footer">
+  <div class="page row admin-footer-inner">
+    <p class="t-caption text-muted">
+      <strong class="text-primary">Universidade Católica de Pernambuco</strong>
+      • Rua do Príncipe, 526, Boa Vista, Recife - PE
+    </p>
+  </div>
+</footer>
